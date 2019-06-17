@@ -61,7 +61,12 @@ export default class App extends Component {
     }
     return (
       <div className="container">
-        <h2 className="text-center mb-3 mt-3">Hostingator Test App !</h2>
+        <h2 className="text-center mb-3 mt-3">Hostinger Test App !</h2>
+        <h6>
+          <p>By Shaikh Al Amin</p>
+          <p>Email: alamin.cse15@gmail.com</p>
+          <p>Phone: +8801712341937</p>
+        </h6>
         <table className="table table-bordered table-sm">
           <thead>
             <tr>
