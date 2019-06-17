@@ -38,7 +38,7 @@ export default class App extends Component {
     console.log(`active page is ${pageNumber}`);
     this.setState({activePage: pageNumber});
     try {
-      const response = await axios.get('http://json-api-facker.herokuapp.com/products?page='+parseInt(pageNumber));
+      const response = await axios.get('https://json-api-facker.herokuapp.com/products?page='+parseInt(pageNumber));
       this.setState({
         data:response.data.data,
         loading:false,
