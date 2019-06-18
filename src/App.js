@@ -53,6 +53,10 @@ export default class App extends Component {
     }
   }
 
+  handleClick = (e)=>{
+    console.log(e.target.id);
+  }
+
   render() {
     const {data,loading} = this.state;
 
@@ -70,10 +74,10 @@ export default class App extends Component {
         <table className="table table-bordered table-sm">
           <thead>
             <tr>
-              <th >id</th>
-              <th >name</th>
-              <th >designation</th>
-              <th >description</th>
+              <th id="id" onClick={this.handleClick}>id</th>
+              <th id="name" onClick={this.handleClick}>name</th>
+              <th id="designation" onClick={this.handleClick}>designation</th>
+              <th id="description" onClick={this.handleClick}>description</th>
             </tr>
           </thead>
           <tbody>
