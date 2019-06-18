@@ -12,7 +12,9 @@ export default class App extends Component {
     activePage:0,
     itemsCountPerPage:0,
     totalItemsCount:0,
-    pageRangeDisplayed:5
+    pageRangeDisplayed:5,
+    sortby:'id',
+    order:'asc'
   }
 
   async componentDidMount(){
@@ -27,7 +29,7 @@ export default class App extends Component {
         totalItemsCount:response.data.total,
         pageRangeDisplayed:3
       })
-      console.log(response.data);
+      //console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -35,10 +37,17 @@ export default class App extends Component {
   }
 
   handlePageChange = async (pageNumber)=>{
-    console.log(`active page is ${pageNumber}`);
     this.setState({activePage: pageNumber});
+    let url = 'https://json-api-facker.herokuapp.com/products?';
+    const {sortby,order} = this.state;
+    if(sortby && order){
+      url = `${url}sortby=${sortby}&order=${order}&page=${pageNumber}`;
+    }else{
+      url = `${url}page=${pageNumber}`;
+    }
+   // sortby=name&order=desc&page=3
     try {
-      const response = await axios.get('https://json-api-facker.herokuapp.com/products?page='+parseInt(pageNumber));
+      const response = await axios.get(url);
       this.setState({
         data:response.data.data,
         loading:false,
@@ -47,36 +56,66 @@ export default class App extends Component {
         totalItemsCount:response.data.total,
         pageRangeDisplayed:3
       })
-      console.log(response.data);
+      //console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   }
 
-  handleClick = (e)=>{
-    console.log(e.target.id);
+  handleClick = async (e)=>{
+    let {order,activePage} = this.state;
+    
+    if (order === '') {
+      order = 'asc';
+    } else if (order === 'asc') {
+      order = 'desc';
+    }else if (order === 'desc') {
+      order = 'asc';
+    }
+
+    //console.log(e.target.id,order);
+    let sortby = e.target.id;
+
+    let url;
+    
+    if(sortby && order){
+      url = `https://json-api-facker.herokuapp.com/products?sortby=${sortby}&order=${order}&page=${activePage}`;
+    }
+
+    try {
+      const response = await axios.get(url);
+      this.setState({
+        data:response.data.data,
+        loading:false,
+        activePage:response.data.current_page,
+        itemsCountPerPage:response.data.per_page,
+        totalItemsCount:response.data.total,
+        pageRangeDisplayed:3,
+        sortby:sortby,
+        order:order
+      })
+      //console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {
     const {data,loading} = this.state;
 
     if(loading){
-      return <h3>fetching....</h3>
+      return <p>fetching....</p>
     }
     return (
       <div className="container">
         <h2 className="text-center mb-3 mt-3">Hostinger Test App !</h2>
-        <h6>
-          <p>By Shaikh Al Amin</p>
-          <p>Email: alamin.cse15@gmail.com</p>
-          <p>Phone: +8801712341937</p>
-        </h6>
+        <p>By Shaikh Al Amin</p>
         <table className="table table-bordered table-sm">
           <thead>
             <tr>
               <th id="id" onClick={this.handleClick}>id</th>
               <th id="name" onClick={this.handleClick}>name</th>
-              <th id="designation" onClick={this.handleClick}>designation</th>
+              <th id="category" onClick={this.handleClick}>designation</th>
               <th id="description" onClick={this.handleClick}>description</th>
             </tr>
           </thead>
