@@ -14,11 +14,12 @@ export default class App extends Component {
     totalItemsCount:0,
     pageRangeDisplayed:5,
     sortby:'id',
-    order:'asc'
+    order:'asc',
+    childCLick:{}
   }
 
   async componentDidMount(){
-
+    
     try {
       const response = await axios.get('https://json-api-facker.herokuapp.com/products');
       this.setState({
@@ -33,6 +34,8 @@ export default class App extends Component {
     } catch (error) {
       console.error(error);
     }
+
+    localStorage.setItem("lastclick","");
 
   }
 
@@ -100,16 +103,37 @@ export default class App extends Component {
     }
   }
 
+  onRowClicked = (item)=>{
+    console.log('received from child',item);
+    this.setState({
+      childCLick:item
+    })
+    
+  }
+
   render() {
-    const {data,loading} = this.state;
+    const {data,loading,childCLick} = this.state;
 
     if(loading){
       return <p>fetching....</p>
     }
+    let rowClickText;
+    if( Object.keys(childCLick).length > 0){
+      rowClickText = <ul>
+        <li>{childCLick.id}</li>
+        <li>{childCLick.name}</li>
+        <li>{childCLick.category}</li>
+        <li>{childCLick.description}</li>
+        </ul>
+    }
+
     return (
       <div className="container">
-        <h2 className="text-center mb-3 mt-3">Hostinger Test App !</h2>
-        <p>By Shaikh Al Amin</p>
+        <h6 className="text-center mb-2 mt-3">Hostinger Test App ! by Shaikh Al Amin</h6>
+          {
+            rowClickText &&
+            rowClickText
+          }
         <table className="table table-bordered table-sm">
           <thead>
             <tr>
@@ -122,7 +146,7 @@ export default class App extends Component {
           <tbody>
             {
               data.map((item,i)=>{
-                return <TrItem key={i} item={item}/>
+                return <TrItem key={i} item={item} onRowClicked={this.onRowClicked}/>
               })
             }
             
