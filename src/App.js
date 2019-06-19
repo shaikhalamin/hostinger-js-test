@@ -15,7 +15,8 @@ export default class App extends Component {
     pageRangeDisplayed:5,
     sortby:'id',
     order:'asc',
-    childCLick:{}
+    childCLick:{},
+    lastRowIndex:''
   }
 
   async componentDidMount(){
@@ -34,8 +35,6 @@ export default class App extends Component {
     } catch (error) {
       console.error(error);
     }
-
-    localStorage.setItem("lastclick","");
 
   }
 
@@ -75,7 +74,6 @@ export default class App extends Component {
     }else if (order === 'desc') {
       order = 'asc';
     }
-
     //console.log(e.target.id,order);
     let sortby = e.target.id;
 
@@ -97,17 +95,31 @@ export default class App extends Component {
         sortby:sortby,
         order:order
       })
-      //console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   }
 
-  onRowClicked = (item)=>{
-    console.log('received from child',item);
+  onRowClicked = (item,lastRow)=>{
+    let {childCLick,lastRowIndex} = this.state;
+
+    if( Object.keys(childCLick).length > 0){
+      let trDoc = document.getElementById("row_"+childCLick.id);
+      if(trDoc !==null){
+        trDoc.style.backgroundColor=''
+      }else{
+        //console.log(lastRowIndex);
+        lastRowIndex++
+        let mainTable = document.getElementById("hostinger")
+        mainTable.rows.item(lastRowIndex).style.backgroundColor='';
+      }
+    }
     this.setState({
-      childCLick:item
-    })
+      childCLick:item,
+      lastRowIndex:lastRow
+    });
+
+    document.getElementById("row_"+item.id).style.backgroundColor='green'
     
   }
 
@@ -134,7 +146,7 @@ export default class App extends Component {
             rowClickText &&
             rowClickText
           }
-        <table className="table table-bordered table-sm">
+        <table id="hostinger" className="table table-bordered table-sm">
           <thead>
             <tr>
               <th id="id" onClick={this.handleClick}>id</th>
