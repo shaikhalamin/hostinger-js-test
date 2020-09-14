@@ -1,4 +1,4 @@
-#React custom datatables with api call
+###`React custom datatables with api call`
 
 
 #Clone the repo 
@@ -7,7 +7,14 @@
 
     git clone https://github.com/shaikhalamin/hostinger-js-test.git
 
+//Install the dependency
+
+    npm i
+
 ```
+
 #RUN_THE_PROJECT
 
-### `npm start`
+```javascript
+npm start
+```
