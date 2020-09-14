@@ -1,4 +1,4 @@
-###`React custom datatables with api call`
+###React custom datatables with api call
 
 
 #Clone the repo 
@@ -11,10 +11,7 @@
 
     npm i
 
-```
-
-#RUN_THE_PROJECT
-
-```javascript
+// Run the project
 npm start
+
 ```
